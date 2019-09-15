@@ -47,23 +47,13 @@ namespace SA
         void Start()
         {
 
-            currentTurn = 0;
-
-            Character[] characters = FindObjectsOfType<Character>();
-
-            characters[0].initiative.CompareTo(characters[1].initiative);
-
-            Array.Sort<Character>(characters, new Comparison<Character>(
-                              (i1, i2) => i2.initiative.CompareTo(i1.initiative)));
-
-            foreach (var item in characters)
-            {
+            turnSequence = TurnSequenceHelper.GetCharacterSequence(FindObjectsOfType<Character>()).ToArray();
 
 
-
-            }
 
         }
+
+
 
         // Update is called once per frame
         void Update()
