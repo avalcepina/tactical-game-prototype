@@ -40,18 +40,18 @@ namespace SA
 
         public GameObject cellVisualization;
 
-        private void Start()
+        public void Init()
         {
             ReadLevel();
 
-            Node n = GetNode(unit.transform.position);
-            if (n != null)
-            {
+            // Node n = GetNode(unit.transform.position);
+            // if (n != null)
+            // {
 
-                unit.transform.position = n.worldPosition;
+            //     unit.transform.position = n.worldPosition;
 
 
-            }
+            // }
 
 
         }
@@ -235,7 +235,7 @@ namespace SA
             }
         }
 
-        Node GetNode(Vector3 worldPosition)
+        public Node GetNode(Vector3 worldPosition)
         {
             Vector3 position = worldPosition - minPosition;
             int x = Mathf.FloorToInt(position.x / xzScale);

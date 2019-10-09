@@ -15,6 +15,7 @@ namespace SA
         public Vector3 worldPosition;
 
         public GridObject obstacle;
+        public Character character;
 
         public float hCost;
         public float gCost;
