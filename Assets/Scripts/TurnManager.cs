@@ -9,65 +9,78 @@ namespace SA
     public class TurnManager : MonoBehaviour
     {
 
-        private int currentTurn;
+        private int currentTurnIndex;
+        private Turn currentTurn;
 
         private Character[] turnSequence;
 
         public LineRenderer pathViz;
-        bool isPathfinding;
+
         public GridManager gridManager;
-
-        public void PathfinderCall(Node targetNode, Character c)
-        {
-
-            if (!isPathfinding)
-            {
-
-                isPathfinding = true;
-
-                PathfinderMaster.singleton.RequestPathfind(c, c.currentNode, targetNode, PathfinderCallback, gridManager);
-            }
-
-        }
-
-        void PathfinderCallback(List<Node> p, Character c)
-        {
-            isPathfinding = false;
-
-            if (p == null)
-            {
-                Debug.LogWarning("Path is not vlaid");
-                return;
-            }
-
-            pathViz.positionCount = p.Count;
-        }
 
         // Start is called before the first frame update
         void Start()
         {
 
-            currentTurn = 0;
+            gridManager.Init();
+            Character[] characters = PlaceCharacters();
 
-            Character[] characters = FindObjectsOfType<Character>();
+            Debug.Log("Calculating T=turn sequence");
 
-            characters[0].initiative.CompareTo(characters[1].initiative);
+            turnSequence = TurnSequenceHelper.GetCharacterSequence(characters).ToArray();
 
-            Array.Sort<Character>(characters, new Comparison<Character>(
-                              (i1, i2) => i2.initiative.CompareTo(i1.initiative)));
+            Debug.Log("Turn sequence has been calculated");
 
-            foreach (var item in characters)
-            {
+            currentTurn = new Turn(turnSequence[0], gridManager);
 
+            Debug.Log("Current payer is " + currentTurn.GetCharacter().name + " of team " + currentTurn.GetCharacter().team);
 
-
-            }
+            currentTurnIndex = 0;
 
         }
+
+        private Character[] PlaceCharacters()
+        {
+            Character[] characters = FindObjectsOfType<Character>();
+
+            foreach (var character in characters)
+            {
+                Node n = gridManager.GetNode(character.transform.position);
+                if (n != null)
+                {
+                    character.transform.position = n.worldPosition;
+                    character.currentNode = n;
+                    n.character = character;
+                }
+                else
+                {
+                    Debug.LogError("Character " + character.name + "is out of bounds");
+                }
+            }
+
+            return characters;
+        }
+
+
 
         // Update is called once per frame
         void Update()
         {
+
+            if (currentTurn.Execute(this))
+            {
+                if (currentTurnIndex == turnSequence.Length - 1)
+                {
+                    currentTurnIndex = 0;
+                }
+                else
+                {
+                    currentTurnIndex++;
+                }
+
+                currentTurn = new Turn(turnSequence[currentTurnIndex], gridManager);
+
+            }
 
         }
     }

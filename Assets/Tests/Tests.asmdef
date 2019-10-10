@@ -1,0 +1,12 @@
+﻿{
+    "name": "Tests",
+    "references": [
+        "AssemblySciprtsDefinition"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}

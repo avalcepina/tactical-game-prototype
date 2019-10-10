@@ -19,15 +19,18 @@ namespace SA
 
         private void Awake()
         {
-
+            currentJobs = new List<Pathfinder>();
+            todoJobs = new List<Pathfinder>();
             singleton = this;
 
         }
 
-        public void RequestPathfind(Character character, Node start, Node end, Pathfinder.PathfindingComplete callback, GridManager gridManager)
+        public void RequestPathfind(Node start, Node end, Pathfinder.PathfindingComplete callback, GridManager gridManager)
         {
 
-            Pathfinder newJob = new Pathfinder(character, start, end, callback, gridManager);
+            Debug.Log("Creating new pathfinding job");
+
+            Pathfinder newJob = new Pathfinder(start, end, callback, gridManager);
             todoJobs.Add(newJob);
 
         }
