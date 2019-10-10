@@ -6,6 +6,8 @@ namespace SA
 
         ITurnState execute();
 
+        bool isEndingState();
+
     }
 
 }

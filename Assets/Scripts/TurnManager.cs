@@ -15,34 +15,8 @@ namespace SA
         private Character[] turnSequence;
 
         public LineRenderer pathViz;
-        bool isPathfinding;
+
         public GridManager gridManager;
-
-        public void PathfinderCall(Node targetNode, Character c)
-        {
-
-            if (!isPathfinding)
-            {
-
-                isPathfinding = true;
-
-                PathfinderMaster.singleton.RequestPathfind(c, c.currentNode, targetNode, PathfinderCallback, gridManager);
-            }
-
-        }
-
-        void PathfinderCallback(List<Node> p, Character c)
-        {
-            isPathfinding = false;
-
-            if (p == null)
-            {
-                Debug.LogWarning("Path is not vlaid");
-                return;
-            }
-
-            pathViz.positionCount = p.Count;
-        }
 
         // Start is called before the first frame update
         void Start()
@@ -51,9 +25,16 @@ namespace SA
             gridManager.Init();
             Character[] characters = PlaceCharacters();
 
+            Debug.Log("Calculating T=turn sequence");
+
             turnSequence = TurnSequenceHelper.GetCharacterSequence(characters).ToArray();
 
-            currentTurn = new Turn(turnSequence[0]);
+            Debug.Log("Turn sequence has been calculated");
+
+            currentTurn = new Turn(turnSequence[0], gridManager);
+
+            Debug.Log("Current payer is " + currentTurn.GetCharacter().name + " of team " + currentTurn.GetCharacter().team);
+
             currentTurnIndex = 0;
 
         }
@@ -97,7 +78,7 @@ namespace SA
                     currentTurnIndex++;
                 }
 
-                currentTurn = new Turn(turnSequence[currentTurnIndex]);
+                currentTurn = new Turn(turnSequence[currentTurnIndex], gridManager);
 
             }
 

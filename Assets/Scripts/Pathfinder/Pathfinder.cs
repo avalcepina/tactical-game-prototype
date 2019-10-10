@@ -5,24 +5,22 @@ using UnityEngine;
 namespace SA
 {
 
-    public class Pathfinder : MonoBehaviour
+    public class Pathfinder
     {
 
         public GridManager gridManager;
-        public Character character;
         public Node startNode;
         public Node endNode;
 
         public volatile float timer;
         public volatile bool jobDone;
 
-        public delegate void PathfindingComplete(List<Node> n, Character c);
+        public delegate void PathfindingComplete(List<Node> n);
         public PathfindingComplete completeCallback;
         public List<Node> targetPath;
 
-        public Pathfinder(Character character, Node startNode, Node endNode, PathfindingComplete completeCallback, GridManager gridManager)
+        public Pathfinder(Node startNode, Node endNode, PathfindingComplete completeCallback, GridManager gridManager)
         {
-            this.character = character;
             this.startNode = startNode;
             this.endNode = endNode;
             this.completeCallback = completeCallback;
@@ -42,7 +40,7 @@ namespace SA
 
             if (completeCallback != null)
             {
-                completeCallback(targetPath, character);
+                completeCallback(targetPath);
             }
 
         }

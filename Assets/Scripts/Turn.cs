@@ -1,30 +1,38 @@
 using System.Collections;
+using UnityEngine;
 
 namespace SA
 {
     public class Turn
     {
 
-        private enum State
-        {
-            Idle,
-            Pathfinding,
-            Moving,
-            Moved
-        }
 
+        private ITurnState currentState;
+
+        GridManager gridManager;
         Character character;
 
-        bool isMoving = false;
+        public Character GetCharacter()
+        {
+            return character;
+        }
 
-        public Turn(Character character)
+        public Turn(Character character, GridManager gridManager)
         {
             this.character = character;
+            this.gridManager = gridManager;
+            this.currentState = new DetectMouseState(this, gridManager);
         }
 
         public bool Execute(TurnManager turnManager)
         {
-            return false;
+            Debug.Log("Executing turn with state " + currentState.GetType().Name);
+
+            currentState = currentState.execute();
+
+            Debug.Log("Completing turn with state " + currentState.GetType().Name);
+
+            return currentState.isEndingState();
         }
 
     }
