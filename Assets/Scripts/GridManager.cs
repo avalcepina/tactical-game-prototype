@@ -162,6 +162,7 @@ namespace SA
                         //     nodeViz3.Add(worldPosition);
                         // }
 
+
                         if (overlapNode.Length > 0)
                         {
 
@@ -204,8 +205,6 @@ namespace SA
                         {
 
                             RaycastHit hit;
-
-
 
                             if (Physics.Raycast(node.worldPosition, Vector3.down, out hit, yScale / 2))
                             {
