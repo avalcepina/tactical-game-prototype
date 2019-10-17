@@ -47,15 +47,34 @@ namespace SA
 
         public List<Node> FindPathInternal()
         {
+
+            Debug.Log("Commencing pathfinding");
+
             List<Node> path = new List<Node>();
             List<Node> openSet = new List<Node>();
             HashSet<Node> closedSet = new HashSet<Node>();
 
             openSet.Add(startNode);
 
+            Debug.Log("Start node is x " + startNode.x + " y " + startNode.y + " z " + startNode.z);
+            Debug.Log("End node is x " + endNode.x + " y " + endNode.y + " z " + endNode.z);
+
+
+            Debug.Log("Openset size is " + openSet.Count);
+
+
             while (openSet.Count > 0)
             {
+
+
                 Node currentNode = openSet[0];
+
+                if (currentNode == null)
+                {
+
+                    Debug.LogError("Current node is unexpectedly null!");
+                    return path;
+                }
 
                 for (int i = 0; i < openSet.Count; i++)
                 {
@@ -75,12 +94,18 @@ namespace SA
 
                 if (currentNode.Equals(endNode))
                 {
+
+
                     path = RetracePath(startNode, endNode);
                     break;
                 }
 
+                Debug.Log("Exploring neighbours " + GetNeighbours(currentNode).Count);
+
                 foreach (Node neighbour in GetNeighbours(currentNode))
                 {
+
+
                     if (!closedSet.Contains(neighbour))
                     {
                         float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
@@ -98,6 +123,8 @@ namespace SA
                     }
                 }
             }
+
+            Debug.Log("Pathfinder identified path with size " + path.Count);
 
             return path;
         }
@@ -119,6 +146,9 @@ namespace SA
         {
             List<Node> nodes = new List<Node>();
 
+            Debug.Log("Getting neighbours of node x " + node.x + " y " + node.y + " z " + node.z);
+
+
             for (int x = -1; x <= 1; x++)
             {
 
@@ -132,12 +162,14 @@ namespace SA
                     int _y = startNode.y;
                     int _z = z + node.z;
 
+                    Debug.Log("New neighbour x " + _x + " y " + _y + " z " + _z);
                     Node n = GetNode(_x, _z, _y);
 
                     Node newNode = GetNeighbour(n);
 
                     if (newNode != null)
                     {
+
 
                         nodes.Add(newNode);
 
@@ -161,11 +193,24 @@ namespace SA
         Node GetNeighbour(Node node)
         {
 
+            if (node == null)
+            {
+                Debug.Log("Node is null");
+                return null;
+            }
+
             Node retValue = null;
 
             if (node.isWalkable)
             {
+                Debug.Log("Node x " + node.x + " y " + node.y + " z " + node.z + " is walkable");
+
                 retValue = node;
+            }
+            else
+            {
+
+                Debug.Log("Node x " + node.x + " y " + node.y + " z " + node.z + " is NOT walkable");
             }
 
             return retValue;
