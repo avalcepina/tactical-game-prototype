@@ -17,6 +17,9 @@ namespace SA
         [SerializeField]
         float yScale = 1f;
 
+        [SerializeField]
+        LineRenderer lineRenderer;
+
         Vector3 minPosition;
         Vector3 maxPosition;
 
@@ -39,6 +42,12 @@ namespace SA
         public GameObject unit;
 
         public GameObject cellVisualization;
+
+
+        public LineRenderer GetLineRenderer()
+        {
+            return lineRenderer;
+        }
 
         public void Init()
         {
@@ -245,7 +254,7 @@ namespace SA
 
         public Node GetNode(int x, int y, int z)
         {
-            if (x < 0 || x > pos_x - 1 || y < 0 || y > pos_y - 1 || x < 0 || z > pos_z - 1)
+            if (x < 0 || x > pos_x - 1 || y < 0 || y > pos_y - 1 || z < 0 || z > pos_z - 1)
             {
                 return null;
             }

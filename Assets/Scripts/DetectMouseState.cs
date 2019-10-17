@@ -27,6 +27,8 @@ namespace SA
 
                     Node targetNode = gridManager.GetNode(hit.point);
 
+
+
                     if (targetNode != null)
                     {
 

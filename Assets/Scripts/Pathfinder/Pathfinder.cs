@@ -57,6 +57,8 @@ namespace SA
             openSet.Add(startNode);
 
             Debug.Log("Start node is x " + startNode.x + " y " + startNode.y + " z " + startNode.z);
+            Debug.Log("End node is x " + endNode.x + " y " + endNode.y + " z " + endNode.z);
+
 
             Debug.Log("Openset size is " + openSet.Count);
 
@@ -66,6 +68,13 @@ namespace SA
 
 
                 Node currentNode = openSet[0];
+
+                if (currentNode == null)
+                {
+
+                    Debug.LogError("Current node is unexpectedly null!");
+                    return path;
+                }
 
                 for (int i = 0; i < openSet.Count; i++)
                 {
@@ -85,6 +94,8 @@ namespace SA
 
                 if (currentNode.Equals(endNode))
                 {
+
+
                     path = RetracePath(startNode, endNode);
                     break;
                 }
@@ -181,6 +192,12 @@ namespace SA
 
         Node GetNeighbour(Node node)
         {
+
+            if (node == null)
+            {
+                Debug.Log("Node is null");
+                return null;
+            }
 
             Node retValue = null;
 

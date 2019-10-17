@@ -20,6 +20,8 @@ namespace SA
             this.isPathfinding = false;
             this.targetNode = targetNode;
             this.path = null;
+
+
         }
 
         public ITurnState execute()
@@ -50,9 +52,13 @@ namespace SA
 
             isPathfinding = true;
 
-            Debug.Log("Requesting pathfinding");
+            Node characterNode = turn.GetCharacter().currentNode;
 
-            PathfinderMaster.singleton.RequestPathfind(turn.GetCharacter().currentNode, targetNode, PathfinderCallback, gridManager);
+            Debug.Log("Requesting pathfinding");
+            Debug.Log("Character Node - x " + characterNode.x + " y " + characterNode.y + " z " + characterNode.z);
+            Debug.Log("Target Node - x " + targetNode.x + " y " + targetNode.y + " z " + targetNode.z);
+
+            PathfinderMaster.singleton.RequestPathfind(characterNode, targetNode, PathfinderCallback, gridManager);
 
             return this;
 
@@ -60,19 +66,43 @@ namespace SA
 
         void PathfinderCallback(List<Node> p)
         {
+            if (p == null)
+            {
+                Debug.Log("P is null!");
+                return;
+            }
+
             Debug.Log("Invoking pathfinding callback with result size " + p.Count);
 
             isPathfinding = false;
 
             if (p == null)
             {
-                Debug.Log("Path is not vlaid");
+                Debug.Log("Path is not valid");
 
                 return;
             }
             else
             {
                 path = p;
+
+                LineRenderer lineRenderer = gridManager.GetLineRenderer();
+                lineRenderer.positionCount = path.Count;
+                var t = Time.time;
+
+                Debug.Log("Path size is " + path.Count);
+
+                for (int i = 0; i < path.Count; i++)
+                {
+
+
+                    Node pathNode = path[i];
+
+                    Debug.Log("Position " + i + " in line renderer is x " + pathNode.x + " y " + pathNode.y + " z " + pathNode.z);
+
+                    lineRenderer.SetPosition(i, new Vector3(pathNode.worldPosition.x, pathNode.worldPosition.y + 0.5f, pathNode.worldPosition.z));
+                }
+
             }
 
         }
