@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
+using System;
 
 namespace SA
 {
@@ -25,13 +26,23 @@ namespace SA
 
         }
 
-        public void RequestPathfind(Node start, Node end, Pathfinder.PathfindingComplete callback, GridManager gridManager)
+        public void RequestPathfind(Node start, Node end, Pathfinder.PathfindingComplete callback, GridManager gridManager, Dictionary<ulong, Node> reachableNodes)
         {
 
             Debug.Log("Creating new pathfinding job");
 
-            Pathfinder newJob = new Pathfinder(start, end, callback, gridManager);
+            Pathfinder newJob = new Pathfinder(start, end, callback, gridManager, reachableNodes);
             todoJobs.Add(newJob);
+
+        }
+
+        public Dictionary<UInt64, Node> RequestReachableNodes(Node start, int maxCost, GridManager gridManager)
+        {
+
+            Debug.Log("Creating new pathfinding job");
+
+            Pathfinder pf = new Pathfinder(start, null, null, gridManager);
+            return pf.getReachableNodes(maxCost);
 
         }
 
