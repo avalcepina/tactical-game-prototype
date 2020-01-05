@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SA
@@ -8,6 +9,7 @@ namespace SA
 
 
         private ITurnState currentState;
+        private Dictionary<ulong, Node> reachableNodes;
 
         GridManager gridManager;
         Character character;
@@ -23,6 +25,17 @@ namespace SA
             this.gridManager = gridManager;
             this.currentState = new DetectMouseState(this, gridManager);
         }
+
+        public void SetReachableNodes(Dictionary<ulong, Node> reachableNodes)
+        {
+            this.reachableNodes = reachableNodes;
+        }
+
+        public Dictionary<ulong, Node> GetReachableNodes()
+        {
+            return this.reachableNodes;
+        }
+
 
         public bool Execute(TurnManager turnManager)
         {

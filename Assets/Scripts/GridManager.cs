@@ -221,8 +221,8 @@ namespace SA
                                 node.worldPosition = hit.point;
                             }
 
-                            GameObject tile = Instantiate(cellVisualization, node.worldPosition + Vector3.up * .01f, Quaternion.identity);
-                            tile.SetActive(true);
+                            // GameObject tile = Instantiate(cellVisualization, node.worldPosition + Vector3.up * .01f, Quaternion.identity);
+                            // tile.SetActive(true);
                         }
 
                         grid[x, z, y] = node;
@@ -241,6 +241,16 @@ namespace SA
                     }
                 }
             }
+        }
+
+        public void HighlightNodes(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                GameObject tile = Instantiate(cellVisualization, node.worldPosition + Vector3.up * .01f, Quaternion.identity);
+                tile.SetActive(true);
+            }
+
         }
 
         public Node GetNode(Vector3 worldPosition)

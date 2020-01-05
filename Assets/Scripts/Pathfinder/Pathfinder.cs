@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,9 +16,10 @@ namespace SA
         public volatile float timer;
         public volatile bool jobDone;
 
-        public delegate void PathfindingComplete(List<Node> n);
+        public delegate void PathfindingComplete(Node start, Node end, List<Node> n);
         public PathfindingComplete completeCallback;
         public List<Node> targetPath;
+        public Dictionary<ulong, Node> reachableNodes;
 
         public Pathfinder(Node startNode, Node endNode, PathfindingComplete completeCallback, GridManager gridManager)
         {
@@ -27,11 +29,26 @@ namespace SA
             this.gridManager = gridManager;
         }
 
+        public Pathfinder(Node startNode, Node endNode, PathfindingComplete completeCallback, GridManager gridManager, Dictionary<ulong, Node> reachableNodes) : this(startNode, endNode, completeCallback, gridManager)
+        {
+
+            this.reachableNodes = reachableNodes;
+        }
+
 
         public void FindPath()
         {
             targetPath = FindPathInternal();
             jobDone = true;
+
+            Debug.Log("Pathfinder job completed");
+
+            Debug.Log("Pathfinder result path size is " + targetPath.Count);
+
+            if (completeCallback != null)
+            {
+                completeCallback(startNode, endNode, targetPath);
+            }
 
         }
 
@@ -40,8 +57,54 @@ namespace SA
 
             if (completeCallback != null)
             {
-                completeCallback(targetPath);
+                completeCallback(startNode, endNode, targetPath);
             }
+
+        }
+
+        public Dictionary<UInt64, Node> getReachableNodes(int maxDistance)
+        {
+            Debug.Log("Retrieveing all reachable nodes");
+
+            List<Tuple<Node, int>> openSet = new List<Tuple<Node, int>>();
+            Dictionary<UInt64, Node> closedSet = new Dictionary<UInt64, Node>();
+
+            openSet.Add(new Tuple<Node, int>(startNode, 0));
+
+            while (openSet.Count > 0)
+            {
+
+                List<Tuple<Node, int>> newNodes = new List<Tuple<Node, int>>();
+
+                foreach (var currentTuple in openSet)
+                {
+                    if (currentTuple.Item2 < maxDistance)
+                    {
+
+                        foreach (Node neighbour in GetNeighbours(currentTuple.Item1))
+                        {
+
+                            if (!closedSet.ContainsKey(neighbour.Key) && neighbour.isWalkable)
+                            {
+
+                                newNodes.Add(new Tuple<Node, int>(neighbour, currentTuple.Item2 + 1));
+
+
+                                closedSet[neighbour.Key] = neighbour;
+
+                            }
+                        }
+
+                    }
+
+                }
+
+                openSet = newNodes;
+
+
+            }
+
+            return closedSet;
 
         }
 
@@ -51,17 +114,11 @@ namespace SA
             Debug.Log("Commencing pathfinding");
 
             List<Node> path = new List<Node>();
+
             List<Node> openSet = new List<Node>();
-            HashSet<Node> closedSet = new HashSet<Node>();
+            Dictionary<UInt64, Node> closedSet = new Dictionary<UInt64, Node>();
 
             openSet.Add(startNode);
-
-            Debug.Log("Start node is x " + startNode.x + " y " + startNode.y + " z " + startNode.z);
-            Debug.Log("End node is x " + endNode.x + " y " + endNode.y + " z " + endNode.z);
-
-
-            Debug.Log("Openset size is " + openSet.Count);
-
 
             while (openSet.Count > 0)
             {
@@ -90,7 +147,7 @@ namespace SA
                 }
 
                 openSet.Remove(currentNode);
-                closedSet.Add(currentNode);
+                closedSet[currentNode.Key] = currentNode;
 
                 if (currentNode.Equals(endNode))
                 {
@@ -100,13 +157,11 @@ namespace SA
                     break;
                 }
 
-                Debug.Log("Exploring neighbours " + GetNeighbours(currentNode).Count);
-
                 foreach (Node neighbour in GetNeighbours(currentNode))
                 {
 
 
-                    if (!closedSet.Contains(neighbour))
+                    if (!closedSet.ContainsKey(neighbour.Key) && reachableNodes.ContainsKey(neighbour.Key))
                     {
                         float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
 
@@ -123,8 +178,6 @@ namespace SA
                     }
                 }
             }
-
-            Debug.Log("Pathfinder identified path with size " + path.Count);
 
             return path;
         }
@@ -146,9 +199,6 @@ namespace SA
         {
             List<Node> nodes = new List<Node>();
 
-            Debug.Log("Getting neighbours of node x " + node.x + " y " + node.y + " z " + node.z);
-
-
             for (int x = -1; x <= 1; x++)
             {
 
@@ -162,7 +212,6 @@ namespace SA
                     int _y = startNode.y;
                     int _z = z + node.z;
 
-                    Debug.Log("New neighbour x " + _x + " y " + _y + " z " + _z);
                     Node n = GetNode(_x, _z, _y);
 
                     Node newNode = GetNeighbour(n);

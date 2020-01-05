@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace SA
 {
@@ -31,11 +32,18 @@ namespace SA
 
             Debug.Log("Turn sequence has been calculated");
 
+            currentTurnIndex = 0;
             currentTurn = new Turn(turnSequence[0], gridManager);
 
             Debug.Log("Current payer is " + currentTurn.GetCharacter().name + " of team " + currentTurn.GetCharacter().team);
 
-            currentTurnIndex = 0;
+            Node characterNode = currentTurn.GetCharacter().currentNode;
+
+            Dictionary<ulong, Node> reachableNodes = PathfinderMaster.singleton.RequestReachableNodes(characterNode, 10, gridManager);
+
+            gridManager.HighlightNodes(reachableNodes.Values.ToList());
+
+            currentTurn.SetReachableNodes(reachableNodes);
 
         }
 
@@ -62,7 +70,6 @@ namespace SA
         }
 
 
-
         // Update is called once per frame
         void Update()
         {
@@ -78,6 +85,7 @@ namespace SA
                     currentTurnIndex++;
                 }
 
+                //TODO should be changed
                 currentTurn = new Turn(turnSequence[currentTurnIndex], gridManager);
 
             }

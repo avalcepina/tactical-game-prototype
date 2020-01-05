@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ namespace SA
         }
 
         public Node parentNode;
-    }
 
+        public UInt64 Key { get { return (((UInt64)(UInt32)x) << 32) | (UInt64)(UInt32)y | (UInt64)(UInt32)z; } }
+
+    }
 }
