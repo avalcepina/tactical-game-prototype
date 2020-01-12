@@ -14,6 +14,11 @@ namespace SA
         GridManager gridManager;
         Character character;
 
+        public void SetCharacter(Character character)
+        {
+            this.character = character;
+        }
+
         public Character GetCharacter()
         {
             return character;
@@ -23,7 +28,7 @@ namespace SA
         {
             this.character = character;
             this.gridManager = gridManager;
-            this.currentState = new DetectMouseState(this, gridManager);
+            this.currentState = new StartingState(this, gridManager);
         }
 
         public void SetReachableNodes(Dictionary<ulong, Node> reachableNodes)

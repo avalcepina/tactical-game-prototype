@@ -10,6 +10,7 @@ namespace SA
         Turn turn;
         GridManager gridManager;
         List<Node> path;
+        int currentNodeIndex = 0;
 
         public MoveCharacter(Turn turn, GridManager gridManager, List<Node> path)
         {
@@ -23,7 +24,39 @@ namespace SA
 
             Debug.Log("Inside MoveCharacter");
 
-            return this;
+            Character character = turn.GetCharacter();
+
+            character.transform.LookAt(path[currentNodeIndex].worldPosition);
+
+            character.transform.position = path[currentNodeIndex].worldPosition;
+
+            character.currentNode = path[currentNodeIndex];
+
+            if (currentNodeIndex == (path.Count - 1))
+            {
+
+                character.actionPoints = character.actionPoints - (path.Count - 1);
+
+                if (character.actionPoints > 0)
+                {
+
+                    return new DetectMouseState(turn, gridManager);
+
+                }
+
+                return new EndingState(turn, gridManager);
+
+            }
+            else
+            {
+
+                currentNodeIndex = currentNodeIndex + 1;
+
+                return this;
+
+            }
+
+
 
         }
 

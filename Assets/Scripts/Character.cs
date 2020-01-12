@@ -12,6 +12,9 @@ namespace SA
         public int initiative;
 
         [SerializeField]
+        public int actionPoints;
+
+        [SerializeField]
         public string team;
 
         public Node currentNode;

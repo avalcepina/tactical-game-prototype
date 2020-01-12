@@ -52,8 +52,6 @@ namespace SA
                 if (pathfindingCache.ContainsKey(key))
                 {
 
-                    Debug.Log("Pathfinder cache - Getting key : " + key.start + " " + key.end);
-
                     if (pathfindingCache[key].Count > 0)
                     {
 
@@ -69,9 +67,14 @@ namespace SA
                         {
                             Node pathNode = path[i];
 
-                            Debug.Log("Position " + i + " in line renderer is x " + pathNode.x + " y " + pathNode.y + " z " + pathNode.z);
-
                             lineRenderer.SetPosition(i, new Vector3(pathNode.worldPosition.x, pathNode.worldPosition.y + 0.5f, pathNode.worldPosition.z));
+                        }
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+
+                            return new MoveCharacter(this.turn, this.gridManager, path);
+
                         }
 
 
@@ -118,13 +121,6 @@ namespace SA
             {
 
                 PathBoundaries key = new PathBoundaries(start.Key, end.Key);
-
-                // foreach (KeyValuePair<PathBoundaries, List<Node>> pair in pathfindingCache)
-                // {
-                //     Debug.Log("Key: " + pair.Key.start + " " + pair.Key.end + " Values: " + pair.Value.Count);
-                // }
-
-                Debug.Log("Pathfinder cache - updating key : " + key.start + " " + key.end);
 
                 pathfindingCache[key] = path;
 

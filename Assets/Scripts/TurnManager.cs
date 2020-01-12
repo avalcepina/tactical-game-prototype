@@ -37,14 +37,6 @@ namespace SA
 
             Debug.Log("Current payer is " + currentTurn.GetCharacter().name + " of team " + currentTurn.GetCharacter().team);
 
-            Node characterNode = currentTurn.GetCharacter().currentNode;
-
-            Dictionary<ulong, Node> reachableNodes = PathfinderMaster.singleton.RequestReachableNodes(characterNode, 10, gridManager);
-
-            gridManager.HighlightNodes(reachableNodes.Values.ToList());
-
-            currentTurn.SetReachableNodes(reachableNodes);
-
         }
 
         private Character[] PlaceCharacters()

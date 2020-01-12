@@ -217,7 +217,6 @@ namespace SA
 
                             if (Physics.Raycast(node.worldPosition, Vector3.down, out hit, yScale / 2))
                             {
-                                Debug.Log("Falling ");
                                 node.worldPosition = hit.point;
                             }
 
@@ -245,8 +244,19 @@ namespace SA
 
         public void HighlightNodes(List<Node> nodes)
         {
+
+            GameObject[] highlights = GameObject.FindGameObjectsWithTag("highlight");
+
+
+            foreach (var go in highlights)
+            {
+                Destroy(go);
+            }
+
             foreach (var node in nodes)
             {
+
+
                 GameObject tile = Instantiate(cellVisualization, node.worldPosition + Vector3.up * .01f, Quaternion.identity);
                 tile.SetActive(true);
             }

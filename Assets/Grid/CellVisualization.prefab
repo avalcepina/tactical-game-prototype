@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1705930627732623635}
   m_Layer: 0
   m_Name: CellVisualization
-  m_TagString: Untagged
+  m_TagString: highlight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

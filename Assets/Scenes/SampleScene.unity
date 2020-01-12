@@ -639,7 +639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd1493fe37398d44bef64d957df8f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathViz: {fileID: 0}
+  pathViz: {fileID: 1046339349}
   gridManager: {fileID: 1046339348}
 --- !u!114 &1046339346
 MonoBehaviour:
@@ -860,6 +860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initiative: 8
+  actionPoints: 12
   team: enemy
 --- !u!1 &1314628046
 GameObject:
@@ -1567,6 +1568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initiative: 10
+  actionPoints: 10
   team: player
 --- !u!43 &1724403826
 Mesh:
