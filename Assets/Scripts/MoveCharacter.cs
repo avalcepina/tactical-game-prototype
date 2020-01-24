@@ -8,14 +8,12 @@ namespace SA
     public class MoveCharacter : ITurnState
     {
         Turn turn;
-        GridManager gridManager;
         List<Node> path;
         int currentNodeIndex = 0;
 
-        public MoveCharacter(Turn turn, GridManager gridManager, List<Node> path)
+        public MoveCharacter(Turn turn, List<Node> path)
         {
             this.turn = turn;
-            this.gridManager = gridManager;
             this.path = path;
         }
 
@@ -24,7 +22,11 @@ namespace SA
 
             Debug.Log("Inside MoveCharacter");
 
-            Character character = turn.GetCharacter();
+            // var v3 = new Vector3(0.0f, Input.GetAxis("Horizontal"), 0.0f);
+
+            // turn.cameraController.RotateCamera(v3);
+
+            Character character = turn.character;
 
             character.transform.LookAt(path[currentNodeIndex].worldPosition);
 
@@ -35,16 +37,18 @@ namespace SA
             if (currentNodeIndex == (path.Count - 1))
             {
 
-                character.actionPoints = character.actionPoints - (path.Count - 1);
+                character.actionPoints = character.actionPoints - (path.Count);
+
+                turn.cameraController.PositionCamera(character.currentNode.worldPosition);
 
                 if (character.actionPoints > 0)
                 {
 
-                    return new DetectMouseState(turn, gridManager);
+                    return new CalculateReachableNodesState(turn);
 
                 }
 
-                return new EndingState(turn, gridManager);
+                return new EndingState(turn);
 
             }
             else

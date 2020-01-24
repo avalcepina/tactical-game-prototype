@@ -7,14 +7,12 @@ namespace SA
 
     public class EndingState : ITurnState
     {
+
         Turn turn;
-        GridManager gridManager;
 
-
-        public EndingState(Turn turn, GridManager gridManager)
+        public EndingState(Turn turn)
         {
             this.turn = turn;
-            this.gridManager = gridManager;
 
         }
 

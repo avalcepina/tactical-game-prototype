@@ -13,7 +13,6 @@ namespace SA
         public static List<Character> GetCharacterSequence(Character[] characters)
         {
 
-
             List<Character> result = new List<Character>();
 
             Array.Sort<Character>(characters, new Comparison<Character>(
