@@ -19,6 +19,13 @@ namespace SA
 
         public GridManager gridManager;
 
+        public CameraController cameraController;
+
+        public Turn GetCurrentTurn()
+        {
+            return currentTurn;
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -33,9 +40,9 @@ namespace SA
             Debug.Log("Turn sequence has been calculated");
 
             currentTurnIndex = 0;
-            currentTurn = new Turn(turnSequence[0], gridManager);
+            currentTurn = new Turn(turnSequence[0], gridManager, cameraController);
 
-            Debug.Log("Current payer is " + currentTurn.GetCharacter().name + " of team " + currentTurn.GetCharacter().team);
+            Debug.Log("Current payer is " + currentTurn.character.name + " of team " + currentTurn.character.team);
 
         }
 
@@ -78,11 +85,12 @@ namespace SA
                 }
 
                 //TODO should be changed
-                currentTurn = new Turn(turnSequence[currentTurnIndex], gridManager);
+                currentTurn = new Turn(turnSequence[currentTurnIndex], gridManager, cameraController);
 
             }
 
         }
+
     }
 
 }

@@ -255,8 +255,6 @@ namespace SA
 
             foreach (var node in nodes)
             {
-
-
                 GameObject tile = Instantiate(cellVisualization, node.worldPosition + Vector3.up * .01f, Quaternion.identity);
                 tile.SetActive(true);
             }

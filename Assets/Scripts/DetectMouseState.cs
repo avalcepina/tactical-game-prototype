@@ -24,15 +24,14 @@ namespace SA
 
     public class DetectMouseState : ITurnState
     {
+
         Turn turn;
-        GridManager gridManager;
 
         ConcurrentDictionary<PathBoundaries, List<Node>> pathfindingCache;
 
-        public DetectMouseState(Turn turn, GridManager gridManager)
+        public DetectMouseState(Turn turn)
         {
             this.turn = turn;
-            this.gridManager = gridManager;
             this.pathfindingCache = new ConcurrentDictionary<PathBoundaries, List<Node>>();
         }
 
@@ -45,9 +44,9 @@ namespace SA
             if (Physics.Raycast(ray, out hit, 1000))
             {
 
-                Node targetNode = gridManager.GetNode(hit.point);
+                Node targetNode = turn.gridManager.GetNode(hit.point);
 
-                PathBoundaries key = new PathBoundaries(turn.GetCharacter().currentNode.Key, targetNode.Key);
+                PathBoundaries key = new PathBoundaries(turn.character.currentNode.Key, targetNode.Key);
 
                 if (pathfindingCache.ContainsKey(key))
                 {
@@ -59,21 +58,25 @@ namespace SA
 
                         List<Node> path = pathfindingCache[key];
 
-                        LineRenderer lineRenderer = gridManager.GetLineRenderer();
-                        lineRenderer.positionCount = path.Count;
+                        LineRenderer lineRenderer = turn.gridManager.GetLineRenderer();
+                        lineRenderer.positionCount = path.Count + 1;
                         var t = Time.time;
+
+                        Node currentNode = turn.character.currentNode;
+
+                        lineRenderer.SetPosition(0, new Vector3(currentNode.worldPosition.x, currentNode.worldPosition.y + 0.5f, currentNode.worldPosition.z));
 
                         for (int i = 0; i < path.Count; i++)
                         {
                             Node pathNode = path[i];
 
-                            lineRenderer.SetPosition(i, new Vector3(pathNode.worldPosition.x, pathNode.worldPosition.y + 0.5f, pathNode.worldPosition.z));
+                            lineRenderer.SetPosition(i + 1, new Vector3(pathNode.worldPosition.x, pathNode.worldPosition.y + 0.5f, pathNode.worldPosition.z));
                         }
 
                         if (Input.GetMouseButtonDown(0))
                         {
 
-                            return new MoveCharacter(this.turn, this.gridManager, path);
+                            return new MoveCharacter(turn, path);
 
                         }
 
@@ -94,13 +97,15 @@ namespace SA
 
                     pathfindingCache.TryAdd(key, new List<Node>());
 
-                    PathfinderMaster.singleton.RequestPathfind(turn.GetCharacter().currentNode, targetNode, PathfinderCallback, gridManager, turn.GetReachableNodes());
+                    PathfinderMaster.singleton.RequestPathfind(turn.character.currentNode, targetNode, PathfinderCallback, turn.gridManager, turn.GetReachableNodes());
 
 
                 }
 
 
             }
+
+            turn.cameraController.HandleCameraInput();
 
             return this;
 

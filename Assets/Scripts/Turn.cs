@@ -7,28 +7,19 @@ namespace SA
     public class Turn
     {
 
-
         private ITurnState currentState;
         private Dictionary<ulong, Node> reachableNodes;
 
-        GridManager gridManager;
-        Character character;
+        public GridManager gridManager;
+        public Character character;
+        public CameraController cameraController;
 
-        public void SetCharacter(Character character)
-        {
-            this.character = character;
-        }
-
-        public Character GetCharacter()
-        {
-            return character;
-        }
-
-        public Turn(Character character, GridManager gridManager)
+        public Turn(Character character, GridManager gridManager, CameraController cameraController)
         {
             this.character = character;
             this.gridManager = gridManager;
-            this.currentState = new StartingState(this, gridManager);
+            this.cameraController = cameraController;
+            this.currentState = new CalculateReachableNodesState(this);
         }
 
         public void SetReachableNodes(Dictionary<ulong, Node> reachableNodes)
