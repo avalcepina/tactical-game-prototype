@@ -10,6 +10,7 @@ namespace SA
         Turn turn;
         List<Node> path;
         int currentNodeIndex = 0;
+        float movementspeed = 1.5f;
 
         public MoveCharacter(Turn turn, List<Node> path)
         {
@@ -30,9 +31,28 @@ namespace SA
 
             character.transform.LookAt(path[currentNodeIndex].worldPosition);
 
-            character.transform.position = path[currentNodeIndex].worldPosition;
+            //character.transform.position = path[currentNodeIndex].worldPosition;
 
-            character.currentNode = path[currentNodeIndex];
+
+            // float step = movementspeed * Time.deltaTime; // calculate distance to move
+            character.transform.position = Vector3.MoveTowards(character.transform.position, path[currentNodeIndex].worldPosition, movementspeed * Time.deltaTime);
+
+            //            character.transform.Translate(Vector3.left * movementspeed * Time.deltaTime);
+
+            if (Vector3.Distance(character.transform.position, path[currentNodeIndex].worldPosition) <= 0)
+            {
+
+                character.currentNode = path[currentNodeIndex];
+
+            }
+            else
+            {
+
+                return this;
+
+            }
+
+
 
             if (currentNodeIndex == (path.Count - 1))
             {
