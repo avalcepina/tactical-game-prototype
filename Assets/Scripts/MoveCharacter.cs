@@ -57,11 +57,11 @@ namespace SA
             if (currentNodeIndex == (path.Count - 1))
             {
 
-                character.actionPoints = character.actionPoints - (path.Count);
+                character.currentActionPoints = character.currentActionPoints - (path.Count);
 
                 turn.cameraController.PositionCamera(character.currentNode.worldPosition);
 
-                if (character.actionPoints > 0)
+                if (character.currentActionPoints > 0)
                 {
 
                     return new CalculateReachableNodesState(turn);

@@ -12,7 +12,10 @@ namespace SA
         public int initiative;
 
         [SerializeField]
-        public int actionPoints;
+        public int totalActionPoints;
+
+        [SerializeField]
+        public int currentActionPoints;
 
         [SerializeField]
         public string team;

@@ -24,7 +24,7 @@ namespace SA
 
             Character character = turn.character;
 
-            Dictionary<ulong, Node> reachableNodes = PathfinderMaster.singleton.RequestReachableNodes(character.currentNode, character.actionPoints, turn.gridManager);
+            Dictionary<ulong, Node> reachableNodes = PathfinderMaster.singleton.RequestReachableNodes(character.currentNode, character.currentActionPoints, turn.gridManager);
 
             turn.gridManager.HighlightNodes(reachableNodes.Values.ToList());
 

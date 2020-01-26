@@ -16,6 +16,7 @@ namespace SA
 
         public Turn(Character character, GridManager gridManager, CameraController cameraController)
         {
+            character.currentActionPoints = character.totalActionPoints;
             this.character = character;
             this.gridManager = gridManager;
             this.cameraController = cameraController;

@@ -33,7 +33,7 @@ namespace SA
             gridManager.Init();
             Character[] characters = PlaceCharacters();
 
-            Debug.Log("Calculating T=turn sequence");
+            Debug.Log("Calculating turn sequence");
 
             turnSequence = TurnSequenceHelper.GetCharacterSequence(characters).ToArray();
 

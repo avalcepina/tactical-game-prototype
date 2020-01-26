@@ -1072,7 +1072,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initiative: 8
-  actionPoints: 12
+  totalActionPoints: 14
+  currentActionPoints: 0
   team: enemy
 --- !u!1 &1314628046
 GameObject:
@@ -1781,7 +1782,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initiative: 10
-  actionPoints: 10
+  totalActionPoints: 10
+  currentActionPoints: 0
   team: player
 --- !u!1 &1869657724
 GameObject:
