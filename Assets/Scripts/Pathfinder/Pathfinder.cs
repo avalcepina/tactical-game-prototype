@@ -135,13 +135,15 @@ namespace SA
 
                 for (int i = 0; i < openSet.Count; i++)
                 {
-                    if (openSet[i].fCost < currentNode.fCost || (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost))
+
+                    //|| (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+                    if (openSet[i].fCost < currentNode.fCost)
                     {
 
-                        if (!currentNode.Equals(openSet[i]))
-                        {
-                            currentNode = openSet[i];
-                        }
+                        // if (!currentNode.Equals(openSet[i]))
+                        // {
+                        currentNode = openSet[i];
+                        // }
 
                     }
                 }
@@ -184,15 +186,37 @@ namespace SA
 
         int GetDistance(Node start, Node end)
         {
-            int distanceX = Mathf.Abs(start.x - end.x);
-            int distanceZ = Mathf.Abs(start.z - end.z);
+            // int distanceX = Mathf.Abs(start.x - end.x);
+            // int distanceZ = Mathf.Abs(start.z - end.z);
 
-            if (distanceX > distanceZ)
+
+            // //D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
+
+            // return Mathf.Max(distanceX, distanceZ);
+
+            // if (distanceX > distanceZ)
+            // {
+            //     return 14 * distanceZ + 10 * (distanceX - distanceZ);
+            // }
+
+            // return 14 * distanceX + 10 * (distanceZ - distanceX);
+
+
+            int dif_x = Mathf.Abs(start.x - end.x);
+            int dif_z = Mathf.Abs(start.z - end.z);
+
+
+            // if i set this below 2.00f he will move in zig zags
+            if (dif_x > dif_z)
             {
-                return 14 * distanceZ + 10 * (distanceX - distanceZ);
+                return 2 * dif_z + (dif_x - dif_z);
+            }
+            else
+            {
+                return 2 * dif_x + (dif_z - dif_x);
             }
 
-            return 14 * distanceX + 10 * (distanceZ - distanceX);
+
         }
 
         List<Node> GetNeighbours(Node node)
@@ -252,14 +276,8 @@ namespace SA
 
             if (node.isWalkable)
             {
-                Debug.Log("Node x " + node.x + " y " + node.y + " z " + node.z + " is walkable");
 
                 retValue = node;
-            }
-            else
-            {
-
-                Debug.Log("Node x " + node.x + " y " + node.y + " z " + node.z + " is NOT walkable");
             }
 
             return retValue;

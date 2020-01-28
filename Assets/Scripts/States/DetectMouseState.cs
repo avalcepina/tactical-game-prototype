@@ -120,7 +120,7 @@ namespace SA
         {
 
             Debug.Log("Pathfinder callback");
-            Debug.Log("Pathfinder callback path size is " + path.Count);
+            //            Debug.Log("Pathfinder callback path size is " + path.Count);
 
             if (path.Count > 0)
             {
